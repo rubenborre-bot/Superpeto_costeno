@@ -62,3 +62,22 @@ const duplicado = await pedidosColeccion.findOne({ trabajadorId: new ObjectId(id
         
     }  
 }
+
+export async function consultarPedidos() {
+    const result = await pedidosColeccion.find({});
+      let pedidos = await result.toArray();
+    if(pedidos.length > 0){
+        return {
+            success: true,
+            pedidos: pedidos,
+            message: `Pedidos encontrados` 
+        }
+    }
+    else{
+        return{
+         success: true,
+         pedidos: pedidos,
+         message: `Pedidos no encontrados`
+        }
+    }
+}

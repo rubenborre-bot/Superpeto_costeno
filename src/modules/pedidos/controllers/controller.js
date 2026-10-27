@@ -1,4 +1,5 @@
 import { registrarPedido } from "../services/service.js";
+import { consultarPedidos } from "../services/service.js";
 export async function registrarElPedido(req, res) {
     try {
         const resultado = await registrarPedido(req.body.id, req.body.cantidadSolicitada, req.body.fecha);
@@ -20,5 +21,25 @@ export async function registrarElPedido(req, res) {
             success: false,
             message: 'Error al registrar pedido',
         });
+    }
+}
+
+export async function consultarElPedido(req, res) {
+    try{
+    const result = await consultarPedidos();
+    if(result.success){
+      res.status(200).json({
+        pedidos: result.pedidos,
+        message: result.message
+      })
+    }
+    }
+     catch(error){
+        console.error(error)
+        res.status(500).json({
+          statusCode : 500,
+          success: false,
+          message: 'Error al consultar pedidos',
+        })
     }
 }
