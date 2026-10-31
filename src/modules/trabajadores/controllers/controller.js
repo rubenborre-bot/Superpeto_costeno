@@ -3,7 +3,7 @@ import { consultarTrabajador } from "../services/service.js";
 import { desactivarTrabajador } from "../services/service.js";
 export async function registrar(req, res) {
     try {
-        const resultado = await registrarTrabajador(req.body.nombre);
+        const resultado = await registrarTrabajador(req.body.nombres, req.body.apellidos);
         if(resultado.success){
         res.status(201).json({
             message: resultado.message

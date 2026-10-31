@@ -3,11 +3,16 @@ import { ObjectId } from "mongodb";
 const collection_name = "trabajadores"
 const dbname = "superpeto_costeno"
 const trabajadoresColeccion = client.db(dbname).collection(collection_name)
-export async function registrarTrabajador(nombre) {
-    if( nombre != undefined && nombre!= null && typeof nombre === "string"){
-    if(nombre.trim() != ""){
+export async function registrarTrabajador(nombres, apellidos) {
+    if( nombres != undefined && nombres!= null && typeof nombres === "string"
+        && apellidos != undefined && apellidos != null && typeof apellidos === "string"
+    ){
+        if(nombres.trim() != "" && apellidos.trim() != ""){
+let nombreCompleto = nombres.trim().split(/\s+/).join(" ");
+let apellidoCompleto = apellidos.trim().split(/\s+/).join(" ");
 let trabajador = {
-    "nombre": nombre.trim(),
+    "nombres": nombreCompleto.toLowerCase(),
+    "apellidos": apellidoCompleto.toLowerCase(),
     "activo": true,
     "createdAt": new Date(),
     "updatedAt": new Date()
@@ -20,21 +25,21 @@ let trabajador = {
     }else{
         return {
                 success: false,
-                message: "Debe ingresar un nombre"
+                message: "Debe ingresar un nombre y un apellido"
             }
         
     } }
      else{
         return {
                 success: false,
-                message: "Debe ingresar un nombre valido y no debe ingresar numeros"
+                message: "Debe ingresar un nombre y apellido valido"
             }
         
     }  
  }
  export async function consultarTrabajador() {
  let result = await trabajadoresColeccion.find({})
-      .project({ nombre: 1, activo: 1 })          
+      .project({_id: 1, nombres: 1, apellidos: 1, activo: 1 })          
       .sort({ createdAt: -1 })                  
       .limit(20)  
     

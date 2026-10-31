@@ -31,14 +31,16 @@ export async function registrarPedido(id, num, fecha) {
     }
  }
     const trabajador = await trabajadoresColeccion.findOne({ _id: new ObjectId(id) },
-      { projection: { nombre: 1, activo: 1, createdAt: 1 } })
+      { projection: { nombres: 1, activo: 1, createdAt: 1 } })
     if(trabajador !== null && trabajador.activo  && typeof num == "number" && num > 0){
 let pedido = {
     "trabajadorId": trabajador._id,
     "fecha": fecha,
     "cantidadSolicitada": num,
+    "cantidadAcordada": num,
     "createdAt": new Date(),
-    "updatedAt": new Date()
+    "updatedAt": new Date(),
+    "historialModificaciones" : []
 }
 const duplicado = await pedidosColeccion.findOne({ trabajadorId: new ObjectId(id), fecha })
    if(duplicado == null){
@@ -78,6 +80,49 @@ export async function consultarPedidos() {
          success: true,
          pedidos: pedidos,
          message: `Pedidos no encontrados`
+        }
+    }
+}
+export async function modificarPedido(id, nuevaCantidad) {
+    const result = await pedidosColeccion.findOne({ _id: new ObjectId(id) })
+    if(result != null && typeof nuevaCantidad == "number" && !Number.isNaN(nuevaCantidad)){
+       if(result.cantidadAcordada != nuevaCantidad && nuevaCantidad>1 ){
+        const actualizar = await pedidosColeccion.updateOne({ _id: new ObjectId(id) },
+                {
+                    $set: { cantidadAcordada: nuevaCantidad },
+                    $push: {
+                        historialModificaciones: {
+                            cantidadAnterior: result.cantidadAcordada,
+                            nuevaCantidad: nuevaCantidad,
+                            fechaModificacion: new Date()
+                        }
+                    }
+                })
+    if(actualizar.modifiedCount != 0){
+return{
+            success: true,
+            message: "Pedido actualizado correctamente",
+        }
+    }
+    else{
+       return{
+            success: false,
+            message: "Pedido no actualizado correctamente",
+        } 
+    }
+        
+       }
+       else{
+        return {
+            success: false,
+            message: "Debe colocar una cantidad diferente a la actual o la nueva cantidad debe ser mayor que 1"
+        }
+       }
+    }
+    else{
+        return {
+            success: false,
+            message: "Pedido no encontrado o ingreso un valor que no es un numero"
         }
     }
 }
