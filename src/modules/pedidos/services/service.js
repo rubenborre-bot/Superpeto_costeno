@@ -1,48 +1,31 @@
 import client from "../../../config/database.js";
 import { ObjectId } from "mongodb";
+import { DateTime } from "luxon"
 const collection_name = "pedidos"
 const dbname = "superpeto_costeno"
 const pedidosColeccion = client.db(dbname).collection(collection_name)
 const trabajadoresColeccion = client.db(dbname).collection("trabajadores")
-export async function registrarPedido(id, num, fecha) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-    return {
-        success: false,
-        message: "La fecha debe tener el formato YYYY-MM-DD"
-    };
-}
- let fechaArr = fecha.split("-")
-  fechaArr = fechaArr.map((valor)=>{
-    return parseInt(valor); 
- })
-  if(fechaArr.some(Number.isNaN)){
-         return {
-        success: false,
-        message: "Para la fecha debe ingresar numeros"
-    }
-}
- 
-
- let fechaCorregida = new Date(fechaArr[0], fechaArr[1]-1, fechaArr[2]);
- if(fechaArr[0]!= fechaCorregida.getFullYear() || fechaArr[1]-1 != fechaCorregida.getMonth() || fechaArr[2] != fechaCorregida.getDate()){
-    return {
-        success: false,
-        message: "La fecha ingresada no es valida"
-    }
- }
+export async function registrarPedido(id, num) {
     const trabajador = await trabajadoresColeccion.findOne({ _id: new ObjectId(id) },
       { projection: { nombres: 1, activo: 1, createdAt: 1 } })
-    if(trabajador !== null && trabajador.activo  && typeof num == "number" && num > 0){
+    if(trabajador !== null && trabajador.activo  && typeof num == "number" && num > 1){
+   let fechaEntrega = DateTime.now().setZone("America/Bogota")
+   if(fechaEntrega.hour > 13 || (fechaEntrega.hour === 13 && fechaEntrega.minute > 0)){
+         fechaEntrega =  fechaEntrega.set({day: fechaEntrega.day+1});
+          
+    }
+    fechaEntrega = fechaEntrega.toFormat("yyyy-LL-dd");
+
 let pedido = {
     "trabajadorId": trabajador._id,
-    "fecha": fecha,
+    "fechaEntrega": fechaEntrega,
     "cantidadSolicitada": num,
     "cantidadAcordada": num,
     "createdAt": new Date(),
     "updatedAt": new Date(),
     "historialModificaciones" : []
 }
-const duplicado = await pedidosColeccion.findOne({ trabajadorId: new ObjectId(id), fecha })
+const duplicado = await pedidosColeccion.findOne({ trabajadorId: trabajador._id , fechaEntrega })
    if(duplicado == null){
  let result = await pedidosColeccion.insertOne(pedido)
  return {
