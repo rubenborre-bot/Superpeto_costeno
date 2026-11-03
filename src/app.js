@@ -3,10 +3,12 @@ import router from './routes/health.routes.js';
 import routerTrabajadores from './modules/trabajadores/routes/trabajadores.routes.js';
 import routerPedidos from './modules/pedidos/routes/pedidos.routes.js';
 import entregasRouter from './modules/entregas/routes/entrega.route.js';
+import configuracionRouter from './modules/configuracion/routes/configuracion.route.js';
 const app = express();
 app.use(express.json());
 app.use("/health", router)
 app.use("/trabajadores", routerTrabajadores)
 app.use("/pedidos", routerPedidos)
 app.use("/entregas", entregasRouter)
+app.use("/configuracion", configuracionRouter)
 export default app;

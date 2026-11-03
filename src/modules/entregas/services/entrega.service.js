@@ -1,5 +1,4 @@
 import client from "../../../config/database.js";
-import { ObjectId } from "mongodb";
 import { DateTime } from "luxon";
 const collection_name = "pedidos"
 const dbname = "superpeto_costeno"
@@ -163,4 +162,105 @@ if(typeof nombres == "string" && typeof apellidos == "string" && typeof fecha ==
         }
     }
 }
+}
+
+export async function corregirEntrega(nombres, apellidos, fecha, nuevaCantidad, nuevosPetosAdicionales) {
+    if(typeof nombres == "string" && typeof apellidos == "string" && typeof fecha == "string" && typeof nuevaCantidad == "number" && Number.isFinite(nuevaCantidad) && typeof nuevosPetosAdicionales == "number" &&  Number.isInteger(nuevosPetosAdicionales)){
+        if(nombres.trim()!= "" && apellidos.trim()!= "" && fecha.trim() != "" && nuevaCantidad > 1 && nuevaCantidad < 400 && nuevosPetosAdicionales >= 0){
+            let nombreCompleto = nombres.trim().split(/\s+/).join(" ").toLocaleLowerCase();
+            let apellidoCompleto = apellidos.trim().split(/\s+/).join(" ").toLocaleLowerCase();
+            fecha = fecha.trim();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+           return {
+              success: false,
+              message: "La fecha debe tener el formato año-mes-dia"
+            };
+        }
+ let fechaArr = fecha.split("-")
+  fechaArr = fechaArr.map((valor)=>{
+    return parseInt(valor); 
+ })
+
+ let fechaCorregida = new Date(fechaArr[0], fechaArr[1]-1, fechaArr[2]);
+ if(fechaArr[0]!= fechaCorregida.getFullYear() || fechaArr[1]-1 != fechaCorregida.getMonth() || fechaArr[2] != fechaCorregida.getDate()){
+    return {
+        success: false,
+        message: "La fecha ingresada no es valida"
+    }
+ }
+
+ const trabajador = await trabajadoresColeccion.findOne({ nombres: nombreCompleto, apellidos: apellidoCompleto})
+ if(trabajador != null){
+ const entrega = await entregasColeccion.findOne({trabajadorId: trabajador._id, fecha: fecha})
+ if(entrega != null){
+if(entrega.cantidadActual != nuevaCantidad || entrega.petosAdicionalesActuales != nuevosPetosAdicionales){
+let historialMovimientos = {
+    "cantidadAnterior":entrega.cantidadActual,
+    "nuevaCantidad": nuevaCantidad,
+    "petosAdicionalesAnteriores": entrega.petosAdicionalesActuales,
+    "nuevosPetosAdicionales": nuevosPetosAdicionales,
+    "fechaModificacion": new Date(),
+}
+const actualizar = await entregasColeccion.updateOne({
+                _id: entrega._id,
+                cantidadActual: entrega.cantidadActual,
+                petosAdicionalesActuales: entrega.petosAdicionalesActuales
+            },
+            {
+                $set: {
+                    cantidadActual: nuevaCantidad,
+                    petosAdicionalesActuales: nuevosPetosAdicionales,
+                    updatedAt: new Date()
+                },
+                $push: { historialMovimientos: historialMovimientos }
+            })
+            if(actualizar.matchedCount != 0){
+            if(actualizar.modifiedCount != 0){
+                return{
+                    success: true,
+                    message: "Entrega modificada correctamente"
+                }
+            }else{
+                return{
+                    success: false,
+                    message: "Error al modificar la entrega"
+                }
+            }
+        }else{
+            return{
+                success: false,
+                message: "No se encontro un documento con esos campos"
+            }
+        }
+
+ }else{
+    return{
+        success: false,
+        message: "Para actualizar la entrega debe colocar una cantidad de cucharones o de peto adicional diferente a la actual"
+    }
+ }
+ }else{
+    return{
+        success: false,
+        message: "No se ha encontrado la entrega"
+    }
+ }
+ }else{
+    return{
+        success: false,
+        message: "El trabajador no se ha encontrado"
+    }
+ }
+        }else{
+            return{
+                success: false,
+                message: "Los campos nombres, apellidos y fecha no pueden estar vacios, la nueva cantidad de cucharones debe ser mayor que 1 y no superar el limite maximo, la nueva cantidad de petos adicionales debe ser de 0 en adelante"
+            }
+        }
+    }else{
+        return{
+            success: false,
+            message: "Los campos nombre, fechas y apellidos deben ser valores que corresponden a cada campo y la nueva cantidad de cucharones y de peto adicional deben ser numeros"
+        }
+    }
 }
