@@ -1,5 +1,6 @@
 import client from "../../../config/database.js";
 import { DateTime } from "luxon";
+import { calcularNapa } from "../../equivalencia_napa/services/napa.service.js";
 const collection_name = "pedidos"
 const dbname = "superpeto_costeno"
 const pedidosColeccion = client.db(dbname).collection(collection_name)
@@ -17,7 +18,12 @@ export async function registrarEntrega(nombres, apellidos, num, petosAdicionales
        fechaDeEntrega = fechaDeEntrega.toFormat("yyyy-LL-dd");
     const pedido = await pedidosColeccion.findOne({ trabajadorId: trabajador._id , fechaEntrega: fechaDeEntrega})
     if(pedido !== null && typeof num == "number" && num > 1 && num < 400 && typeof petosAdicionales == "number" && Number.isInteger(petosAdicionales) && petosAdicionales >= 0){
-let entrega = {
+
+const duplicado = await entregasColeccion.findOne({ pedidoId: pedido._id})
+   if(duplicado == null){
+    let resultadoCalcularNapa = await calcularNapa(num);
+    if(resultadoCalcularNapa.success){
+    let entrega = {
    "pedidoId": pedido._id,
    "trabajadorId":	pedido.trabajadorId,
    "fecha": pedido.fechaEntrega,
@@ -28,11 +34,11 @@ let entrega = {
    "estado": "Pendiente",
    "createdAt": new Date(),
    "updatedAt": new Date(),
+   "napaCalculada": resultadoCalcularNapa.napa,
+   "equivalenciaNapa": resultadoCalcularNapa.equivalenciasNapa,
    "historialMovimientos" : []
 }
-const duplicado = await entregasColeccion.findOne({ pedidoId: pedido._id})
-   if(duplicado == null){
- let result = await entregasColeccion.insertOne(entrega)
+let result = await entregasColeccion.insertOne(entrega)
  return {
                 success: true,
                 message: `Entrega insertada: ${result.insertedId}`
@@ -40,10 +46,19 @@ const duplicado = await entregasColeccion.findOne({ pedidoId: pedido._id})
     }else{
         return {
                 success: false,
-                message: "Ya hay una entrega creada con esos campos "
+                message: resultadoCalcularNapa.message
+               
             }
         
     }
+
+}else{
+    return{
+        success: false,
+        message: "Ya hay una entrega creada con esos campos"
+    }
+}
+ 
 }else{
         return {
                 success: false,
