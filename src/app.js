@@ -5,6 +5,7 @@ import routerPedidos from './modules/pedidos/routes/pedidos.routes.js';
 import entregasRouter from './modules/entregas/routes/entrega.route.js';
 import configuracionRouter from './modules/configuracion/routes/configuracion.route.js';
 import routerEquivalenciasNapa from './modules/equivalencia_napa/routes/napa.route.js';
+import routerEntregasDinero from './modules/entregas_dinero/routes/entregas_dinero.route.js';
 const app = express();
 app.use(express.json());
 app.use("/health", router)
@@ -13,4 +14,5 @@ app.use("/pedidos", routerPedidos)
 app.use("/entregas", entregasRouter)
 app.use("/configuracion", configuracionRouter)
 app.use("/equivalencias-napa", routerEquivalenciasNapa)
+app.use("/entregas-dinero", routerEntregasDinero)
 export default app;
