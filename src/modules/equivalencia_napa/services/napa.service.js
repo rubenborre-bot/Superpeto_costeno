@@ -12,7 +12,7 @@ export async function registrarEquivalencias(equivalencias) {
         let cucharonesRefUnicos = new Set();
         const compararCucharonesRef = equivalencias.map(element=>{
             cucharonesRefUnicos.add(element.cucharonesReferencia)
-            return element.cucharonesReferencia
+            return element.cucharonesReferencia 
         })
 
         if(cucharonesRefUnicos.size == compararCucharonesRef.length){

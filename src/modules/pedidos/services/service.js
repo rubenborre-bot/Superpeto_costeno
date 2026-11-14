@@ -1,6 +1,7 @@
 import client from "../../../config/database.js";
 import { ObjectId } from "mongodb";
 import { DateTime } from "luxon"
+import { consultarTrabajadorPorNombre } from "../../trabajadores/services/service.js";
 const collection_name = "pedidos"
 const dbname = "superpeto_costeno"
 const pedidosColeccion = client.db(dbname).collection(collection_name)
@@ -68,8 +69,15 @@ export async function consultarPedidos() {
 }
 export async function modificarPedido(id, nuevaCantidad) {
     const result = await pedidosColeccion.findOne({ _id: new ObjectId(id) })
-    if(result != null && typeof nuevaCantidad == "number" && !Number.isNaN(nuevaCantidad)){
+    if(result != null && typeof nuevaCantidad == "number" && Number.isFinite(nuevaCantidad)){
        if(result.cantidadAcordada != nuevaCantidad && nuevaCantidad>1 ){
+        let fechaActual = DateTime.now().setZone("America/Bogota")
+        if(fechaActual.hour > 13 || (fechaActual.hour == 13 && fechaActual.minute>0)){
+             return{
+                success: false,
+                message: "El pedido esta fuera del tiempo establecido para modificiacion"
+             }
+        }
         const actualizar = await pedidosColeccion.updateOne({ _id: new ObjectId(id) },
                 {
                     $set: { cantidadAcordada: nuevaCantidad },
@@ -109,3 +117,74 @@ return{
         }
     }
 }
+
+
+export async function consultarPedidoPorFecha(nombres, apellidos, fecha) {
+
+if(typeof fecha == "string"){
+    if(fecha.trim() != ""){
+
+         fecha = fecha.trim();
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+
+    return {
+        success: false,
+        message: "La fecha debe tener el formato año-mes-dia"
+    };
+
+}
+ let fechaArr = fecha.split("-")
+  fechaArr = fechaArr.map((valor)=>{
+    return parseInt(valor); 
+ })
+
+ let fechaCorregida = new Date(fechaArr[0], fechaArr[1]-1, fechaArr[2]);
+ if(fechaArr[0]!= fechaCorregida.getFullYear() || fechaArr[1]-1 != fechaCorregida.getMonth() || fechaArr[2] != fechaCorregida.getDate()){
+    return {
+        success: false,
+        message: "La fecha ingresada no es valida"
+    }
+ }
+
+const resultado = await consultarTrabajadorPorNombre(nombres, apellidos)
+
+if(resultado.success){
+const resultadoPedido = await pedidosColeccion.findOne({trabajadorId: resultado.trabajador._id,
+        fechaEntrega: fecha})
+
+
+        if(resultadoPedido != null){
+        
+            return {
+                success: true,
+                message: "Pedido consultado por nombres y fecha exitosa",
+                pedido: resultadoPedido
+            }
+        }
+        else{
+            return {
+                success: false,
+                message: "Pedido no encontrado",
+            } 
+        }
+        
+    }else{
+    return{
+        success: false,
+        message: resultado.message
+    }
+}
+    }else{
+    return{
+        success: false,
+        message: "Los campos no pueden estar vacios"
+    }
+}
+}else{
+    return{
+        success: false,
+        message: "Ingrese valores validos para los campos"
+    }
+}
+}
+ 
