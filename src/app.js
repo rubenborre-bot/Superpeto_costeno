@@ -8,8 +8,12 @@ import routerEquivalenciasNapa from './modules/equivalencia_napa/routes/napa.rou
 import routerEntregasDinero from './modules/entregas_dinero/routes/entregas_dinero.route.js';
 import routerPlanificacion from './modules/planificacion_produccion/routes/produccion.route.js';
 import routerBalanceDiario from './modules/balance_diario/routes/balance_diario.route.js';
+import cors from 'cors'
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 app.use("/health", router)
 app.use("/trabajadores", routerTrabajadores)
 app.use("/pedidos", routerPedidos)

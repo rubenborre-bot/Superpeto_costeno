@@ -40,9 +40,9 @@ let trabajador = {
  }
  export async function consultarTrabajador() {
  let result = await trabajadoresColeccion.find({})
-      .project({_id: 1, nombres: 1, apellidos: 1, activo: 1 })          
+      .project({_id: 1, nombres: 1, apellidos: 1, telefono: 1, activo: 1})          
       .sort({ createdAt: -1 })                  
-      .limit(20)  
+      .limit(6)  
     
  return {
             success: true,

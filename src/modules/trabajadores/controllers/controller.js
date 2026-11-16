@@ -8,11 +8,13 @@ export async function registrar(req, res) {
         const resultado = await registrarTrabajador(req.body.nombres, req.body.apellidos, req.body.telefono);
         if(resultado.success){
         res.status(201).json({
+            success: true,
             message: resultado.message
         })
         }
         else{
          res.status(400).json({
+             success: false,
             message: resultado.message
         })
         }
@@ -32,6 +34,7 @@ try {
     const resultado = await consultarTrabajador();
     if(resultado.success){
       res.status(200).json({
+         success: true,
          trabajadores: resultado.trabajadores
       })
     }
@@ -105,11 +108,13 @@ export async function desactivar(req, res) {
         const resultado = await desactivarTrabajador(req.params.id)
         if(resultado.success){
             res.status(200).json({
+                success: true,
                 message: "Estado del trabajador actualizado correctamente"
             })
         }
         else{
             res.status(404).json({
+                success: false,
                 message: "No encontrado"
             })
         }
