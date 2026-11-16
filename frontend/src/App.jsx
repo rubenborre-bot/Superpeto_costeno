@@ -7,11 +7,19 @@ function App() {
 
   return (
     <>
+  <div className='header'>
    <Header />
+  </div>
+  <div className='contenedor'>
+  <div className='sidebar'>
    <Sidebar/>
+  </div>
+  <div className='routes'>
    <Routes>
     <Route path='/trabajadores' element={<Trabajadores/>}/>
    </Routes>
+  </div>
+  </div>
     </>
   )
 }

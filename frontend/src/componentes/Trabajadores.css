@@ -1,0 +1,216 @@
+.modulo-trabajadores {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.titulo-modulo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #343A40;
+  margin-bottom: 4px;
+}
+
+.tarjeta {
+  background-color: #FFFFFF;
+  border: 1px solid #DEE4EA;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tarjeta > label {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: #343A40;
+  margin-bottom: 18px;
+}
+
+.formulario-trabajador,
+.buscador-trabajador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.formulario-trabajador > label,
+.buscador-trabajador > label {
+  flex-basis: 100%;
+}
+
+.formulario-trabajador input,
+.buscador-trabajador input {
+  flex: 1 1 180px;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #CED4DA;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #343A40;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formulario-trabajador input:focus,
+.buscador-trabajador input:focus {
+  border-color: #1769AA;
+  box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.12);
+}
+
+.formulario-trabajador button,
+.buscador-trabajador button,
+.acciones-trabajador button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #1769AA;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.formulario-trabajador button:hover:not(:disabled),
+.buscador-trabajador button:hover:not(:disabled),
+.acciones-trabajador button:hover:not(:disabled) {
+  background-color: #12558B;
+}
+
+.formulario-trabajador button:disabled,
+.acciones-trabajador button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.formulario-trabajador button:focus-visible,
+.buscador-trabajador button:focus-visible,
+.acciones-trabajador button:focus-visible {
+  outline: 3px solid rgba(23, 105, 170, 0.25);
+  outline-offset: 2px;
+}
+
+.resultado-busqueda {
+  flex-basis: 100%;
+  padding: 16px;
+  margin-top: 8px;
+  border: 1px solid #DEE4EA;
+  border-left: 4px solid #1769AA;
+  border-radius: 6px;
+  background-color: #F4F7FA;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.resultado-busqueda p {
+  font-size: 14px;
+  color: #343A40;
+}
+
+.lista-trabajadores {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lista-trabajadores ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.trabajador-card {
+  height: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #DEE4EA;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.trabajador-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.trabajador-nombre {
+  font-size: 16px;
+  font-weight: 700;
+  color: #343A40;
+  overflow-wrap: anywhere;
+}
+
+.trabajador-card p {
+  font-size: 14px;
+  color: #6C757D;
+}
+
+.acciones-trabajador {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.acciones-trabajador button {
+  flex: 1;
+}
+
+.acciones-trabajador button:first-child {
+  background-color: #DC3545;
+}
+
+.acciones-trabajador button:first-child:hover:not(:disabled) {
+  background-color: #B02A37;
+}
+
+@media (max-width: 768px) {
+  .modulo-trabajadores {
+    gap: 18px;
+  }
+
+  .tarjeta {
+    padding: 18px;
+  }
+
+  .formulario-trabajador button,
+  .buscador-trabajador button {
+    width: 100%;
+  }
+
+  .lista-trabajadores ul {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo-modulo {
+    font-size: 24px;
+  }
+
+  .tarjeta {
+    padding: 15px;
+  }
+
+  .formulario-trabajador input,
+  .buscador-trabajador input {
+    flex-basis: 100%;
+  }
+
+  .lista-trabajadores ul {
+    grid-template-columns: 1fr;
+  }
+}
