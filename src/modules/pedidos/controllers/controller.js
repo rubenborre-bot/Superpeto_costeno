@@ -4,14 +4,16 @@ import { modificarPedido } from "../services/service.js";
 import { consultarPedidoPorFecha } from "../services/service.js";
 export async function registrarElPedido(req, res) {
     try {
-        const resultado = await registrarPedido(req.body.id, req.body.cantidadSolicitada, req.body.fecha);
+        const resultado = await registrarPedido(req.body.id, req.body.cantidadSolicitada);
         if(resultado.success){
         res.status(201).json({
+            success: true,
             message: resultado.message
         })
         }
         else{
          res.status(400).json({
+            success:false,
             message: resultado.message
         })
         }
@@ -31,6 +33,7 @@ export async function consultarElPedido(req, res) {
     const result = await consultarPedidos();
     if(result.success){
       res.status(200).json({
+        success:true, 
         pedidos: result.pedidos,
         message: result.message
       })
@@ -50,11 +53,13 @@ export async function modificarElPedido(req, res) {
         const result = await modificarPedido(req.params.id, req.body.nuevaCantidad);
         if(result.success){
            res.status(200).json({
+            success: true,
             message: result.message
            })
         }
         else{
             res.status(400).json({
+                success: false,
                 message: result.message
             })
         }
@@ -73,11 +78,13 @@ export async function consultarPedidoPorLaFecha(req, res) {
         const resultado = await consultarPedidoPorFecha(req.query.nombres, req.query.apellidos, req.query.fecha)
         if(resultado.success){
             res.status(200).json({
+            success: true,
             message: resultado.message,
             pedido: resultado.pedido
            })
         }else{
             res.status(400).json({
+                success: false,
                 message: resultado.message
             })
         }

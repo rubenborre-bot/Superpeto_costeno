@@ -1,26 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Fragment } from "react"
-import "./Trabajadores.css"
-export function Trabajadores(){
-    const [trabajadores, setTrabajadores] = useState([])
+import "./Modulos.css"
+export function Trabajadores(props){
     const [nombres, setNombres] = useState("")
     const [apellidos, setApellidos] = useState("")
     const [telefono, setTelefono] = useState("")
     const [trabajadorEditando, setTrabajadorEditando] = useState(null)
-    const [trabajadorNombres, setTrabajadorNombres] = useState("")
-    const [trabajadorApellidos, setTrabajadorApellidos] = useState("")
-    const [trabajador, setTrabajador] = useState({})
-    function listarTrabajadores(){
-        fetch("http://localhost:3000/trabajadores")
-        .then((response)=>{
-            return response.json()
-        })
-        .then((response)=>{
-            setTrabajadores(response.trabajadores)
-        })
-    }
-    useEffect(listarTrabajadores, [])
-     
+
     function registrarTrabajador(){
         let trabajadorObj = {
         nombres: nombres,
@@ -36,7 +22,7 @@ export function Trabajadores(){
             setNombres("")
             setApellidos("")
             setTelefono("")
-            listarTrabajadores()
+            props.listarTrabajadores()
         }
     })
     }
@@ -47,7 +33,7 @@ export function Trabajadores(){
     })
     .then((response)=>{
         if(response.success){
-            listarTrabajadores()
+            props.listarTrabajadores()
         }
     })
     }
@@ -72,59 +58,46 @@ export function Trabajadores(){
             setApellidos("")
             setTelefono("")
             setTrabajadorEditando(null)
-            listarTrabajadores()
+            props.listarTrabajadores()
         }
     })
     }
-    function consultarTrabajadorPorNombre(){
-        fetch(`http://localhost:3000/trabajadores/buscar?nombres=${trabajadorNombres}&apellidos=${trabajadorApellidos}`)
-        .then((response)=>{
-            return response.json()
-        })
-        .then((response)=>{
-            if(response.success){
-            setTrabajador(response.trabajador)
-            }
-            else{
-                setTrabajador({})
-            }
-        })
-    }
+ 
     return(
         <>
-        <div className="modulo-trabajadores">
+        <div className="modulo">
         <h1 className="titulo-modulo" >Trabajadores</h1>
-        <section className="tarjeta formulario-trabajador">
+        <section className="tarjeta formulario">
         <label>Registrar o actualizar trabajador</label>
         <input value={nombres} onChange={(e)=>{setNombres(e.target.value)}} placeholder="nombres"></input>
         <input value={apellidos} onChange={(e)=>{setApellidos(e.target.value)}} placeholder="apellidos" ></input>
         <input value={telefono} onChange={(e)=>{setTelefono(e.target.value)}} placeholder="telefono"></input>
-        <button onClick={registrarTrabajador} disabled={trabajadorEditando}>Registrar trabajador</button>
-        <button onClick={actualizarTrabajador}disabled={!trabajadorEditando}>Actualizar trabajador</button>
+        <button onClick={registrarTrabajador} disabled={trabajadorEditando} className="boton boton-principal">Registrar trabajador</button>
+        <button onClick={actualizarTrabajador}disabled={!trabajadorEditando} className="boton boton-principal">Actualizar trabajador</button>
         </section>
-        <section className="tarjeta buscador-trabajador">
+        <section className="tarjeta buscador">
         <label>Consultar trabajador por nombre</label>
-        <input value={trabajadorNombres} onChange={(e)=>{setTrabajadorNombres(e.target.value)}} placeholder="nombres"></input>
-        <input value={trabajadorApellidos} onChange={(e)=>{setTrabajadorApellidos(e.target.value)}} placeholder="apellidos" ></input>
-        <button onClick={consultarTrabajadorPorNombre}>Consultar trabajador</button>
-        {trabajador._id && <div className="resultado-busqueda"><p>{`${trabajador.nombres} ${trabajador.apellidos}`}</p>
-        <p>{trabajador.telefono}</p>
-        {trabajador.activo?<p>Activo</p>: <p>Inactivo</p>}</div>}
+        <input value={props.trabajadorNombres} onChange={(e)=>{props.setTrabajadorNombres(e.target.value)}} placeholder="nombres"></input>
+        <input value={props.trabajadorApellidos} onChange={(e)=>{props.setTrabajadorApellidos(e.target.value)}} placeholder="apellidos" ></input>
+        <button onClick={props.consultarTrabajadorPorNombre} className="boton boton-principal">Consultar trabajador</button>
+        {props.trabajador._id && <div className="resultado"><p>{`${props.trabajador.nombres} ${props.trabajador.apellidos}`}</p>
+        <p>{props.trabajador.telefono}</p>
+        {props.trabajador.activo?<p>Activo</p>: <p>Inactivo</p>}</div>}
         </section>
-        <section className="lista-trabajadores">
+        <section className="lista">
         <ul>
             {
-            trabajadores.map((trabajador)=>{
+            props.trabajadores.map((trabajador)=>{
              return <Fragment key={trabajador._id}>
-            <li><article className="trabajador-card"><h3 className="trabajador-nombre">{`${trabajador.nombres} ${trabajador.apellidos}`}</h3>
+            <li><article className="tarjeta-elemento"><h3 className="titulo-elemento">{`${trabajador.nombres} ${trabajador.apellidos}`}</h3>
              <p>{`Telefono: ${trabajador.telefono}`}</p> {trabajador.activo?<p>Activo</p>: <p>Inactivo</p>}
-              <div className="acciones-trabajador">
-             <button onClick={() => desactivarTrabajador(trabajador._id)} disabled={!trabajador.activo}>
+              <div className="acciones">
+             <button onClick={() => desactivarTrabajador(trabajador._id)} disabled={!trabajador.activo} className="boton boton-peligro">
              Desactivar
              </button>
              <button onClick={()=>{editarTrabajador(trabajador.nombres, trabajador.apellidos, trabajador.telefono)
              setTrabajadorEditando(trabajador)
-             }}>Editar</button>
+             }}className="boton boton-secundario" >Editar</button>
              </div>
             </article></li> 
              </Fragment>

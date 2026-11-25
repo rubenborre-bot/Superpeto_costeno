@@ -1,4 +1,6 @@
-.modulo-trabajadores {
+
+
+.modulo {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -13,6 +15,14 @@
   color: #343A40;
   margin-bottom: 4px;
 }
+
+.subtitulo-modulo {
+  font-size: 18px;
+  font-weight: 600;
+  color: #343A40;
+  margin-bottom: 12px;
+}
+
 
 .tarjeta {
   background-color: #FFFFFF;
@@ -30,21 +40,25 @@
   margin-bottom: 18px;
 }
 
-.formulario-trabajador,
-.buscador-trabajador {
+
+.formulario,
+.buscador {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
 
-.formulario-trabajador > label,
-.buscador-trabajador > label {
+.formulario > label,
+.buscador > label {
   flex-basis: 100%;
 }
 
-.formulario-trabajador input,
-.buscador-trabajador input {
+.formulario input,
+.formulario select,
+.formulario textarea,
+.buscador input,
+.buscador select {
   flex: 1 1 180px;
   min-width: 0;
   height: 42px;
@@ -53,50 +67,82 @@
   border-radius: 6px;
   background-color: #FFFFFF;
   color: #343A40;
+  font-size: 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.formulario-trabajador input:focus,
-.buscador-trabajador input:focus {
+.formulario textarea {
+  min-height: 90px;
+  height: auto;
+  padding: 12px;
+  resize: vertical;
+}
+
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus,
+.buscador input:focus,
+.buscador select:focus {
   border-color: #1769AA;
   box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.12);
 }
 
-.formulario-trabajador button,
-.buscador-trabajador button,
-.acciones-trabajador button {
+.formulario input:disabled,
+.formulario select:disabled {
+  background-color: #E9ECEF;
+  cursor: not-allowed;
+}
+
+
+.boton {
   min-height: 40px;
   padding: 0 16px;
   border: none;
   border-radius: 6px;
-  background-color: #1769AA;
   color: #FFFFFF;
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
   transition: background-color 0.2s, opacity 0.2s;
 }
 
-.formulario-trabajador button:hover:not(:disabled),
-.buscador-trabajador button:hover:not(:disabled),
-.acciones-trabajador button:hover:not(:disabled) {
+.boton-principal {
+  background-color: #1769AA;
+}
+
+.boton-principal:hover:not(:disabled) {
   background-color: #12558B;
 }
 
-.formulario-trabajador button:disabled,
-.acciones-trabajador button:disabled {
+.boton-secundario {
+  background-color: #6C757D;
+}
+
+.boton-secundario:hover:not(:disabled) {
+  background-color: #565E64;
+}
+
+.boton-peligro {
+  background-color: #DC3545;
+}
+
+.boton-peligro:hover:not(:disabled) {
+  background-color: #B02A37;
+}
+
+.boton:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
-.formulario-trabajador button:focus-visible,
-.buscador-trabajador button:focus-visible,
-.acciones-trabajador button:focus-visible {
+.boton:focus-visible {
   outline: 3px solid rgba(23, 105, 170, 0.25);
   outline-offset: 2px;
 }
 
-.resultado-busqueda {
+
+.resultado {
   flex-basis: 100%;
   padding: 16px;
   margin-top: 8px;
@@ -109,25 +155,26 @@
   gap: 12px 24px;
 }
 
-.resultado-busqueda p {
+.resultado p {
   font-size: 14px;
   color: #343A40;
 }
 
-.lista-trabajadores {
+
+.lista {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.lista-trabajadores ul {
+.lista ul {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
 
-.trabajador-card {
+.tarjeta-elemento {
   height: 100%;
   background-color: #FFFFFF;
   border: 1px solid #DEE4EA;
@@ -140,24 +187,26 @@
   transition: box-shadow 0.2s, transform 0.2s;
 }
 
-.trabajador-card:hover {
+.tarjeta-elemento:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
-.trabajador-nombre {
+.titulo-elemento {
   font-size: 16px;
   font-weight: 700;
   color: #343A40;
   overflow-wrap: anywhere;
 }
 
-.trabajador-card p {
+.tarjeta-elemento p {
   font-size: 14px;
   color: #6C757D;
 }
 
-.acciones-trabajador {
+
+
+.acciones {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -165,20 +214,35 @@
   padding-top: 8px;
 }
 
-.acciones-trabajador button {
+.acciones .boton {
   flex: 1;
 }
 
-.acciones-trabajador button:first-child {
-  background-color: #DC3545;
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
 }
 
-.acciones-trabajador button:first-child:hover:not(:disabled) {
-  background-color: #B02A37;
+.tabla th,
+.tabla td {
+  padding: 12px;
+  border-bottom: 1px solid #DEE4EA;
+  text-align: left;
+  font-size: 14px;
+  color: #343A40;
 }
+
+.tabla th {
+  background-color: #F4F7FA;
+  font-weight: 700;
+}
+
+
 
 @media (max-width: 768px) {
-  .modulo-trabajadores {
+  .modulo {
     gap: 18px;
   }
 
@@ -186,12 +250,12 @@
     padding: 18px;
   }
 
-  .formulario-trabajador button,
-  .buscador-trabajador button {
+  .formulario > .boton,
+  .buscador > .boton {
     width: 100%;
   }
 
-  .lista-trabajadores ul {
+  .lista ul {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
 }
@@ -205,12 +269,14 @@
     padding: 15px;
   }
 
-  .formulario-trabajador input,
-  .buscador-trabajador input {
+  .formulario input,
+  .formulario select,
+  .buscador input,
+  .buscador select {
     flex-basis: 100%;
   }
 
-  .lista-trabajadores ul {
+  .lista ul {
     grid-template-columns: 1fr;
   }
 }
