@@ -5,6 +5,8 @@ import { Sidebar } from './componentes/Sidebar'
 import { Trabajadores } from './componentes/Trabajadores'
 import { useState, useEffect } from 'react'
 import { Pedidos } from './componentes/Pedidos'
+import { Entregas } from './componentes/Entregas'
+import { EntregaDinero } from './componentes/EntregaDinero'
 function App() {
 const [trabajadores, setTrabajadores] = useState([])
 const [trabajador, setTrabajador] = useState({})  
@@ -49,6 +51,8 @@ const [trabajadorApellidos, setTrabajadorApellidos] = useState("")
    <Routes>
     <Route path='/trabajadores' element={<Trabajadores trabajadores={trabajadores} trabajador={trabajador} trabajadorNombres={trabajadorNombres} trabajadorApellidos={trabajadorApellidos} setTrabajadorNombres={setTrabajadorNombres} setTrabajadorApellidos={setTrabajadorApellidos} listarTrabajadores={listarTrabajadores} consultarTrabajadorPorNombre={consultarTrabajadorPorNombre}/>}/>
     <Route path='/pedidos' element={<Pedidos trabajadores={trabajadores} trabajador={trabajador} trabajadorNombres={trabajadorNombres} trabajadorApellidos={trabajadorApellidos} setTrabajadorNombres={setTrabajadorNombres} setTrabajadorApellidos={setTrabajadorApellidos} listarTrabajadores={listarTrabajadores} consultarTrabajadorPorNombre={consultarTrabajadorPorNombre}/>}/>
+    <Route path='/entregas' element={<Entregas/>}/>
+    <Route path='/dinero' element={<EntregaDinero/>}/>
    </Routes>
   </div>
   </div>
