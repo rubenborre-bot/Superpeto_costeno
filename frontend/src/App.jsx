@@ -10,6 +10,7 @@ import { EntregaDinero } from './componentes/EntregaDinero'
 import { Configuracion } from './componentes/Configuracion'
 import { Produccion } from './componentes/Produccion'
 import { Balance } from './componentes/Balance'
+import { PanelPricipal } from './componentes/PanelPrincipal'
 function App() {
 const [trabajadores, setTrabajadores] = useState([])
 const [trabajador, setTrabajador] = useState({})  
@@ -59,6 +60,7 @@ const [trabajadorApellidos, setTrabajadorApellidos] = useState("")
     <Route path='/configuracion' element={<Configuracion/>}/>
     <Route path='/produccion' element={<Produccion/>}/>
     <Route path='/balance' element={<Balance/>}/>
+    <Route path='/' element={<PanelPricipal/>}/>
    </Routes>
   </div>
   </div>

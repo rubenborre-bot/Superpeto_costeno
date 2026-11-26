@@ -280,3 +280,17 @@
     grid-template-columns: 1fr;
   }
 }
+.titulo-bienvenida {
+    margin-bottom: 4px;
+}
+
+.bienvenida-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bienvenida-texto h2,
+.bienvenida-texto p {
+    margin: 0;
+}
