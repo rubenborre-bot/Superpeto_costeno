@@ -7,6 +7,9 @@ import { useState, useEffect } from 'react'
 import { Pedidos } from './componentes/Pedidos'
 import { Entregas } from './componentes/Entregas'
 import { EntregaDinero } from './componentes/EntregaDinero'
+import { Configuracion } from './componentes/Configuracion'
+import { Produccion } from './componentes/Produccion'
+import { Balance } from './componentes/Balance'
 function App() {
 const [trabajadores, setTrabajadores] = useState([])
 const [trabajador, setTrabajador] = useState({})  
@@ -53,6 +56,9 @@ const [trabajadorApellidos, setTrabajadorApellidos] = useState("")
     <Route path='/pedidos' element={<Pedidos trabajadores={trabajadores} trabajador={trabajador} trabajadorNombres={trabajadorNombres} trabajadorApellidos={trabajadorApellidos} setTrabajadorNombres={setTrabajadorNombres} setTrabajadorApellidos={setTrabajadorApellidos} listarTrabajadores={listarTrabajadores} consultarTrabajadorPorNombre={consultarTrabajadorPorNombre}/>}/>
     <Route path='/entregas' element={<Entregas/>}/>
     <Route path='/dinero' element={<EntregaDinero/>}/>
+    <Route path='/configuracion' element={<Configuracion/>}/>
+    <Route path='/produccion' element={<Produccion/>}/>
+    <Route path='/balance' element={<Balance/>}/>
    </Routes>
   </div>
   </div>

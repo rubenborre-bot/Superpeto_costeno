@@ -7,7 +7,7 @@ export function Sidebar(){
             <h2>MENÚ PRINCIPAL</h2>
            <nav>
             <ul>
-               <li><NavLink to="/">Resumen</NavLink></li>
+               <li><NavLink to="/">Panel principal</NavLink></li>
                <li><NavLink to="/trabajadores">Trabajadores</NavLink></li>
                <li><NavLink to="/pedidos">Pedidos</NavLink></li>
                <li><NavLink to="/produccion">Producción</NavLink></li>
